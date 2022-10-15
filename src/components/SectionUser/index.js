@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const PersonalProfile = styled.section`
+const PersonalProfileBar = styled.section`
   width: 100%;
   padding: 20 0px;
 
@@ -26,4 +26,4 @@ const PersonalProfile = styled.section`
   }
 `;
 
-export default PersonalProfile;
+export default PersonalProfileBar;

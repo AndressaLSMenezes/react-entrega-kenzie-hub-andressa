@@ -1,9 +1,9 @@
-
-
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
+import { useContext } from "react";
+import { Profile } from "../../Providers/Profile";
 
 import { Main, DivLogin, Div } from "../../components/Main";
 import Form from "../../components/Form";
@@ -11,7 +11,6 @@ import Input from "../../components/Input";
 import { GreyButton, PinkButton } from "../../components/Button";
 import { HeadlineBold, Title2 } from "../../components/Fonts";
 import Logo from "../../components/Logo";
-import api from "../../services";
 
 const schema = yup.object({
   email: yup
@@ -22,13 +21,7 @@ const schema = yup.object({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
-
-  const registerGo = (event) => {
-    event.preventDefault();
-
-    navigate("/register");
-  };
+  const { goToRegister, postLogin } = useContext(Profile);
 
   const {
     register,
@@ -38,28 +31,12 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  //CRIAR UM IF CASO A RESPOST SEJA 401 NÃO AUTORIZADO
-
-  const onSubmit = (data) => {
-    api
-      .post(`/sessions`, data)
-      .then((res) => {
-        if (res.statusText === "OK") {
-          navigate("/dashboard");
-          console.log(res);
-          localStorage.setItem("@TokenHub", JSON.stringify(res.data.token));
-          localStorage.setItem("@IdHub", JSON.stringify(res.data.user.id));
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
     <Main>
       <Logo>Kenzie Hub</Logo>
       <Div>
         <Title2>Login</Title2>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(postLogin)}>
           <label htmlFor="email">Email</label>
           <Input
             type="email"
@@ -82,7 +59,7 @@ const Login = () => {
 
         <DivLogin>
           <HeadlineBold>Ainda não possui uma conta?</HeadlineBold>
-          <GreyButton onClick={(event) => registerGo(event)}>
+          <GreyButton onClick={(event) => goToRegister(event)}>
             Cadastre-se
           </GreyButton>
         </DivLogin>

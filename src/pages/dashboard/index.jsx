@@ -1,51 +1,61 @@
 import { useNavigate } from "react-router-dom";
-import api from "../../services";
+import { useContext, useEffect } from "react";
+import { Profile } from "../../Providers/Profile";
 
-
+import { TechRegister } from "../../components/ModalTechRegister";
+import { EditDelete } from "../../components/ModalEditDelete";
 import DashboardHeader from "../../components/DashboardHeader";
-import { HeadlineBold, Title1 } from "../../components/Fonts";
+import { HeadlineBold, Title1, Title2 } from "../../components/Fonts";
 import MainDash from "../../components/MainDashboard";
-import PersonalProfile from "../../components/SectionUser";
+import PersonalProfileBar from "../../components/SectionUser";
+import { Technology } from "../../components/Technology";
+import { TechList } from "../../components/TechList";
+import { TechProject } from "../../components/TechProject";
 
 import logo from "../../assets/Logo.svg";
 
-import { useEffect, useState } from "react";
-
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const {
+    profileData,
+    goOut,
+    visibleModalCreater,
+    setVisibleModalCreater,
+    visibleModalEdit,
 
-  const [personalProfile, setPersonalProfile] = useState({});
+    project,
+  } = useContext(Profile);
 
-  const goOut = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  const { id, bio, contact, course_module, email, name, techs } = profileData;
 
-  const token = localStorage.getItem("@TokenHub");
-
-  useEffect(() => {
-    api.defaults.headers.authorization = `Bearer ${token}`;
-    api
-      .get(`/profile`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
-  // console.log(personalProfile);
   return (
     <>
+      {visibleModalEdit && <EditDelete object={project} />}
+      {visibleModalCreater && <TechRegister />}
+
       <DashboardHeader>
         <div>
           <img src={logo} alt="Logo Kenzie Hub" />
-          <button onClick={(event) => goOut(event)}>Sair</button>
+          <button onClick={() => goOut()}>Sair</button>
         </div>
       </DashboardHeader>
       <MainDash>
-        <PersonalProfile>
+        <PersonalProfileBar>
           <div>
-            <Title1>User Name</Title1>
-            <HeadlineBold>aaaaaaaaaaaaa</HeadlineBold>
+            <Title1>{name}</Title1>
+            <HeadlineBold>{course_module}</HeadlineBold>
           </div>
-        </PersonalProfile>
+        </PersonalProfileBar>
+        <Technology>
+          <Title2>Tecnologias</Title2>
+          <button onClick={() => setVisibleModalCreater(true)}>+</button>
+        </Technology>
+        <TechList>
+          {techs
+            ?.sort((a, b) => a.created_at > b.created_at)
+            .map((element) => {
+              return <TechProject object={element} key={element.id} />;
+            })}
+        </TechList>
       </MainDash>
     </>
   );

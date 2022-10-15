@@ -1,11 +1,6 @@
-import axios from "axios";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import Form from "../../components/Form";
 import Input from "../../components/Input";
@@ -13,6 +8,9 @@ import { Main, DivRegister, Div } from "../../components/Main";
 import { PinkButton, BlackButton } from "../../components/Button";
 import { Headline, Title2 } from "../../components/Fonts";
 import Logo from "../../components/Logo";
+import { Select } from "../../components/Select";
+import { useContext } from "react";
+import { Profile } from "../../Providers/Profile";
 
 const schema = yup.object({
   name: yup.string().required("Nome é obrigatório"),
@@ -34,13 +32,7 @@ const schema = yup.object({
 });
 
 const Register = () => {
-  const navigate = useNavigate();
-
-  const login = (event) => {
-    event.preventDefault();
-
-    navigate("/");
-  };
+  const { goToLogin, postRegister } = useContext(Profile);
 
   const {
     register,
@@ -50,35 +42,11 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
 
-  const notify = (sucess) => {
-    sucess
-      ? toast.success(" Cadastrado com Sucesso! ")
-      : toast.error(" Email já cadastrado! ");
-  };
-
-  // ADICIONAR UM TOAST DEPOIS INDICANDO UM ERRO CASSO O EMAIL JÁ SEJA CASDASTRADO
-
-  const onSubmit = (data) => {
-    console.log(data);
-    axios
-      .post(`https://kenziehub.herokuapp.com/users`, data)
-      .then((res) => {
-        if (res.statusText === "Created") {
-          navigate("/");
-          notify(true);
-        }
-      })
-      .catch((err) => {
-        notify(false);
-        console.log(err);
-      });
-  };
-
   return (
     <Main>
       <DivRegister>
         <Logo>Kenzie Hub</Logo>
-        <BlackButton type="button" onClick={(event) => login(event)}>
+        <BlackButton type="button" onClick={(event) => goToLogin(event)}>
           Voltar
         </BlackButton>
       </DivRegister>
@@ -86,7 +54,7 @@ const Register = () => {
       <Div>
         <Title2>Crie sua conta</Title2>
         <Headline>Rapido e grátis, vamos nessa</Headline>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(postRegister)}>
           <label htmlFor="name">Nome</label>
           <Input
             type="text"
@@ -141,7 +109,7 @@ const Register = () => {
           <p>{errors.contact?.message}</p>
 
           <label htmlFor="course_module">Selecionar módulo</label>
-          <select id="course_module" {...register("course_module")}>
+          <Select id="course_module" {...register("course_module")}>
             <option value="">Escolha</option>
 
             <option value="Primeiro módulo (Introdução ao Frontend)">
@@ -159,7 +127,7 @@ const Register = () => {
             <option value="Quarto módulo (Backend Avançado)">
               Quarto módulo (Backend Avançado)
             </option>
-          </select>
+          </Select>
           <p>{errors.course_module?.message}</p>
 
           <PinkButton type="submit">Cadastrar</PinkButton>
