@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useContext } from "react";
-import { Profile } from "../../Providers/Profile";
+import { AuthContext } from "../../Providers";
 
 import { Modal } from "./style";
 import { Title3 } from "../Fonts";
@@ -16,7 +16,7 @@ const schema = yup.object({
 });
 
 export const TechRegister = () => {
-  const { setVisibleModalCreater, createProject } = useContext(Profile);
+  const { setVisibleModalCreater, createProject } = useContext(AuthContext);
 
   const {
     register,

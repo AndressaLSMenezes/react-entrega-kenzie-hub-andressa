@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useContext } from "react";
-import { Profile } from "../../Providers/Profile";
+import { AuthContext } from "../../Providers";
 
 import { PinkButton, GreyButton } from "../Button";
 import { Title3 } from "../Fonts";
@@ -18,7 +18,7 @@ const schema = yup.object({
 
 export const EditDelete = ({ object }) => {
   const { setVisibleModalEdit, editProject, deleteProject } =
-    useContext(Profile);
+    useContext(AuthContext);
 
   const {
     register,
@@ -42,7 +42,6 @@ export const EditDelete = ({ object }) => {
             id="title"
             placeholder="Nome do Projeto"
             {...register("title")}
-            value={object.title}
           />
 
           <p>{errors.email?.message}</p>

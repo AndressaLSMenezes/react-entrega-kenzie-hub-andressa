@@ -1,11 +1,11 @@
 import { Headline, Title3 } from "../Fonts";
 import { TechLanguage } from "./style";
-import { useContext, useEffect } from "react";
-import { Profile } from "../../Providers/Profile";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers";
 
 export const TechProject = ({ object }) => {
   let { id, status, title } = object;
-  const { setVisibleModalEdit, setProject, project } = useContext(Profile);
+  const { setVisibleModalEdit, setProject } = useContext(AuthContext);
 
   return (
     <TechLanguage

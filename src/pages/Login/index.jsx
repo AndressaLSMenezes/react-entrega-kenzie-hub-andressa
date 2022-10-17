@@ -3,14 +3,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { useContext } from "react";
-import { Profile } from "../../Providers/Profile";
+import { AuthContext } from "../../Providers";
 
 import { Main, DivLogin, Div } from "../../components/Main";
 import Form from "../../components/Form";
 import Input from "../../components/Input";
-import { GreyButton, PinkButton } from "../../components/Button";
+import { PinkButton } from "../../components/Button";
 import { HeadlineBold, Title2 } from "../../components/Fonts";
-import Logo from "../../components/Logo";
+
+import { Link } from "react-router-dom";
+import logo from "../../assets/Logo.svg";
 
 const schema = yup.object({
   email: yup
@@ -21,7 +23,7 @@ const schema = yup.object({
 });
 
 const Login = () => {
-  const { goToRegister, postLogin } = useContext(Profile);
+  const { postLogin } = useContext(AuthContext);
 
   const {
     register,
@@ -33,7 +35,7 @@ const Login = () => {
 
   return (
     <Main>
-      <Logo>Kenzie Hub</Logo>
+      <img src={logo} alt="" />
       <Div>
         <Title2>Login</Title2>
         <Form onSubmit={handleSubmit(postLogin)}>
@@ -59,9 +61,7 @@ const Login = () => {
 
         <DivLogin>
           <HeadlineBold>Ainda não possui uma conta?</HeadlineBold>
-          <GreyButton onClick={(event) => goToRegister(event)}>
-            Cadastre-se
-          </GreyButton>
+          <Link to={"/register"}>Cadastre-se</Link>
         </DivLogin>
       </Div>
     </Main>

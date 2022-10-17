@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const TechLanguage = styled.li`
-  width: 90%;
-  padding: 0 12px;
+  width: 95%;
   height: 49px;
 
   display: flex;
@@ -16,20 +15,17 @@ export const TechLanguage = styled.li`
   cursor: pointer;
 
   h3 {
+    margin-left: 12px;
     overflow: hidden;
   }
 
-  div {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-  }
-
-  div > p {
+  p {
+    margin-right: 12px;
     color: var(--grey-1);
   }
 
   :hover {
+
     background: #343b41;
   }
 `;

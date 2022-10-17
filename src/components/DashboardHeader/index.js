@@ -8,25 +8,15 @@ const DashboardHeader = styled.header`
   align-items: center;
   justify-content: center;
 
+  position: fixed;
+  background-color: var(--grey-4);
+
   div {
     width: 90%;
     max-width: 1200px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  div > button {
-    background-color: var(--grey-3);
-
-    color: var(--grey-0);
-    font-size: 12px;
-    font-weight: 600;
-
-    width: 55px;
-    height: 32px;
-
-    border-radius: var(--border-radius);
   }
 `;
 

@@ -1,4 +1,3 @@
-import "./App.css";
 import RoutesMain from "./routes";
 import GlobalStyle from "./style";
 import { ToastContainer } from "react-toastify";
@@ -9,7 +8,7 @@ function App() {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={800}
+        autoClose={700}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

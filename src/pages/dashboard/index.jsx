@@ -1,6 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-import { Profile } from "../../Providers/Profile";
+import { AuthContext } from "../../Providers";
 
 import { TechRegister } from "../../components/ModalTechRegister";
 import { EditDelete } from "../../components/ModalEditDelete";
@@ -10,12 +9,14 @@ import MainDash from "../../components/MainDashboard";
 import PersonalProfileBar from "../../components/SectionUser";
 import { Technology } from "../../components/Technology";
 import { TechList } from "../../components/TechList";
-import { TechProject } from "../../components/TechProject";
 
 import logo from "../../assets/Logo.svg";
+import { BlackButton } from "../../components/Button";
 
 const Dashboard = () => {
   const {
+    getProfile,
+    tokenUser,
     profileData,
     goOut,
     visibleModalCreater,
@@ -23,9 +24,14 @@ const Dashboard = () => {
     visibleModalEdit,
 
     project,
-  } = useContext(Profile);
+  } = useContext(AuthContext);
 
-  const { id, bio, contact, course_module, email, name, techs } = profileData;
+  useEffect(() => {
+    getProfile(tokenUser);
+    // eslint-disable-next-line
+  }, []);
+
+  const { course_module, name } = profileData;
 
   return (
     <>
@@ -35,7 +41,7 @@ const Dashboard = () => {
       <DashboardHeader>
         <div>
           <img src={logo} alt="Logo Kenzie Hub" />
-          <button onClick={() => goOut()}>Sair</button>
+          <BlackButton onClick={() => goOut()}>Sair</BlackButton>
         </div>
       </DashboardHeader>
       <MainDash>
@@ -49,13 +55,7 @@ const Dashboard = () => {
           <Title2>Tecnologias</Title2>
           <button onClick={() => setVisibleModalCreater(true)}>+</button>
         </Technology>
-        <TechList>
-          {techs
-            ?.sort((a, b) => a.created_at > b.created_at)
-            .map((element) => {
-              return <TechProject object={element} key={element.id} />;
-            })}
-        </TechList>
+        <TechList></TechList>
       </MainDash>
     </>
   );

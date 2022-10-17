@@ -38,7 +38,7 @@ ul {
 
 :root {
   --color-primary: #FF577F;
-  --color-primary-Focus: #FF427F;
+  --color-primary-Focus: #ff0d46;
   --Color-primary-Negative: #59323F;
 
   --Sucess: #3FE864;

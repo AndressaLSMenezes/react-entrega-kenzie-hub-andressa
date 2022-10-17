@@ -2,15 +2,18 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+import { useContext } from "react";
+import { AuthContext } from "../../Providers";
+
+import { Link } from "react-router-dom";
 import Form from "../../components/Form";
 import Input from "../../components/Input";
 import { Main, DivRegister, Div } from "../../components/Main";
-import { PinkButton, BlackButton } from "../../components/Button";
+import { PinkButton } from "../../components/Button";
 import { Headline, Title2 } from "../../components/Fonts";
-import Logo from "../../components/Logo";
 import { Select } from "../../components/Select";
-import { useContext } from "react";
-import { Profile } from "../../Providers/Profile";
+
+import logo from "../../assets/Logo.svg";
 
 const schema = yup.object({
   name: yup.string().required("Nome é obrigatório"),
@@ -32,7 +35,7 @@ const schema = yup.object({
 });
 
 const Register = () => {
-  const { goToLogin, postRegister } = useContext(Profile);
+  const { postRegister } = useContext(AuthContext);
 
   const {
     register,
@@ -45,10 +48,8 @@ const Register = () => {
   return (
     <Main>
       <DivRegister>
-        <Logo>Kenzie Hub</Logo>
-        <BlackButton type="button" onClick={(event) => goToLogin(event)}>
-          Voltar
-        </BlackButton>
+        <img src={logo} alt="" />
+        <Link to={"/"}>Voltar</Link>
       </DivRegister>
 
       <Div>

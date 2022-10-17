@@ -5,6 +5,9 @@ const MainDash = styled.main`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  margin-top: 75px;
+  padding-bottom: 40px;
 `;
 
 export default MainDash;

@@ -20,10 +20,18 @@ export const GreyButton = styled(Button)`
 
 export const PinkButton = styled(Button)`
   background-color: var(--color-primary);
+
+  :focus {
+    background-color: var(--color-primary-Focus);
+  }
 `;
 
 export const BlackButton = styled(Button)`
-  width: 70px;
+  width: 55px;
+  height: 32px;
+
   background: var(--grey-3);
+  border-radius: var(--border-radius);
+
   font-size: var(--font-size-small);
 `;
