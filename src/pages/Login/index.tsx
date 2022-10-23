@@ -12,7 +12,16 @@ import { PinkButton } from "../../components/Button";
 import { HeadlineBold, Title2 } from "../../components/Fonts";
 
 import { Link } from "react-router-dom";
-import logo from "../../assets/Logo.svg";
+
+
+import logo from "../../assets/Logo.svg" ;
+
+
+
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
 
 const schema = yup.object({
   email: yup
@@ -29,7 +38,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm <IUserLogin>({
     resolver: yupResolver(schema),
   });
 

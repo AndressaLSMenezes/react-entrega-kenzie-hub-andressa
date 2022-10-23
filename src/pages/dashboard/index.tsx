@@ -28,6 +28,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getProfile(tokenUser);
+    console.log(project);
     // eslint-disable-next-line
   }, []);
 

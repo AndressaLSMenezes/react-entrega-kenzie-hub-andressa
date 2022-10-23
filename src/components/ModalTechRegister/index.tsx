@@ -4,38 +4,41 @@ import * as yup from "yup";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers";
 
-import { PinkButton, GreyButton } from "../Button";
+import { Modal } from "./style";
 import { Title3 } from "../Fonts";
 import Input from "../Input";
-
-import { ModalEdit } from "./style";
 import { Select } from "../Select";
+import { PinkButton } from "../Button";
+
+export interface IUserTechRegister {
+  title: string;
+  status: string;
+}
 
 const schema = yup.object({
   title: yup.string().required("Nome é obrigatório"),
   status: yup.string().required("Status é obrigatório"),
 });
 
-export const EditDelete = ({ object }) => {
-  const { setVisibleModalEdit, editProject, deleteProject } =
-    useContext(AuthContext);
+export const TechRegister = () => {
+  const { setVisibleModalCreater, createProject } = useContext(AuthContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IUserTechRegister>({
     resolver: yupResolver(schema),
   });
 
   return (
-    <ModalEdit>
+    <Modal>
       <section>
         <div>
-          <Title3>Tecnologia Detalhes</Title3>
-          <button onClick={() => setVisibleModalEdit(false)}>X</button>
+          <Title3>Cadastrar Tecnologia</Title3>
+          <button onClick={() => setVisibleModalCreater(false)}>X</button>
         </div>
-        <form onSubmit={handleSubmit(editProject)}>
+        <form onSubmit={handleSubmit(createProject)}>
           <label htmlFor="title">Nome</label>
           <Input
             type="text"
@@ -44,7 +47,7 @@ export const EditDelete = ({ object }) => {
             {...register("title")}
           />
 
-          <p>{errors.email?.message}</p>
+          <p>{errors.title?.message}</p>
 
           <label htmlFor="status">Selecionar status</label>
           <Select id="status" {...register("status")}>
@@ -52,16 +55,12 @@ export const EditDelete = ({ object }) => {
             <option value="Intermediário">Intermediário</option>
             <option value="Avançado">Avançado</option>
           </Select>
-          <div>
-            <PinkButton type="submit">Salvar alterações</PinkButton>
-            <GreyButton type="button" onClick={() => deleteProject(object.id)}>
-              Excluir
-            </GreyButton>
-          </div>
 
-          <p>{errors.email?.message}</p>
+          <p>{errors.status?.message}</p>
+
+          <PinkButton type="submit">Cadastrar Tecnologia</PinkButton>
         </form>
       </section>
-    </ModalEdit>
+    </Modal>
   );
 };

@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
 import { useContext } from "react";
 import { AuthContext } from "../../Providers";
 
@@ -14,6 +13,20 @@ import { Headline, Title2 } from "../../components/Fonts";
 import { Select } from "../../components/Select";
 
 import logo from "../../assets/Logo.svg";
+
+export interface IUserRegister {
+  id: string;
+  avatar_url: null | string;
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  bio: string;
+  contact: string;
+  course_module: string;
+  created_at: string;
+  updated_at: string;
+}
 
 const schema = yup.object({
   name: yup.string().required("Nome é obrigatório"),
@@ -31,7 +44,7 @@ const schema = yup.object({
     .oneOf([yup.ref("password")], "Precisa ser igual a senha"),
   bio: yup.string().required("Bio é obrigatório"),
   contact: yup.string().required("Contato é obrigatório"),
-  course_module: yup.string("oi").required("É obrigatório definir o modulo"),
+  course_module: yup.string().required("É obrigatório definir o modulo"),
 });
 
 const Register = () => {
@@ -41,7 +54,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IUserRegister>({
     resolver: yupResolver(schema),
   });
 

@@ -2,8 +2,9 @@ import { Headline, Title3 } from "../Fonts";
 import { TechLanguage } from "./style";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers";
+import { IProps } from "../../interfaces";
 
-export const TechProject = ({ object }) => {
+export const TechProject = ({ object }: IProps) => {
   let { id, status, title } = object;
   const { setVisibleModalEdit, setProject } = useContext(AuthContext);
 

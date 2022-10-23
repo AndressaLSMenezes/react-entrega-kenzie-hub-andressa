@@ -1,28 +1,41 @@
-// import { findAllByTestId } from "@testing-library/react";
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import api from "../services";
+import { ReactNode } from "react";
 
-export const AuthContext = createContext();
+import { IUserRegister } from "../pages/Register";
+import { IUserLogin } from "../pages/Login";
+import { IUserEditTechs } from "../components/ModalEditDelete";
+import { IUserTechRegister } from "../components/ModalTechRegister";
 
-export const AuthProvider = ({ children }) => {
-  const [profileData, setProfileData] = useState({});
-  const [visibleModalCreater, setVisibleModalCreater] = useState(false);
-  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-  const [project, setProject] = useState({});
+import { IUserContext, IProject, IProfile } from "../interfaces";
 
-  const tokenUser = JSON.parse(localStorage.getItem("@TokenHub"));
+import api from "../services/api";
+
+interface IUserProvidersProps {
+  children: ReactNode;
+}
+
+export const AuthContext = createContext<IUserContext>({} as IUserContext);
+
+export const AuthProvider = ({ children }: IUserProvidersProps) => {
+  const [profileData, setProfileData] = useState<IProfile>({} as IProfile);
+  const [visibleModalCreater, setVisibleModalCreater] =
+    useState<boolean>(false);
+  const [visibleModalEdit, setVisibleModalEdit] = useState<boolean>(false);
+  const [project, setProject] = useState<IProject>({} as IProject);
+  const [tokenUser, setTokenUser] = useState<string>("" as string);
 
   const navigate = useNavigate();
 
-  async function postRegister(data) {
+  async function postRegister(data: IUserRegister) {
     try {
-      await api.post(`/users`, data);
+      const response = await api.post(`/users`, data);
       navigate("/");
       toast.success(" Cadastrado com Sucesso! ");
+      console.log(response.data);
     } catch (error) {
       toast.error(" Email já cadastrado! ");
       console.error(error);
@@ -31,12 +44,13 @@ export const AuthProvider = ({ children }) => {
 
   ///LOGIN
 
-  async function postLogin(data) {
+  async function postLogin(data: IUserLogin) {
     try {
       const response = await api.post(`/sessions`, data);
       toast.success(" Login feito com Sucesso! ");
       navigate("/dashboard");
       getProfile(response.data.token);
+      setTokenUser(response.data.token);
       localStorage.setItem("@TokenHub", JSON.stringify(response.data.token));
     } catch (error) {
       console.error(error);
@@ -53,7 +67,7 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
-  async function getProfile(token) {
+  async function getProfile(token: string) {
     try {
       const response = await api.get("/profile", {
         headers: {
@@ -61,6 +75,7 @@ export const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
       });
+      console.log(response.data);
       setProfileData(response.data);
     } catch (error) {
       console.error(error);
@@ -71,7 +86,7 @@ export const AuthProvider = ({ children }) => {
 
   // Creater Modal
 
-  async function createProject(data) {
+  async function createProject(data: IUserTechRegister) {
     try {
       await api.post("/users/techs", data, {
         headers: {
@@ -102,7 +117,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  async function editProject(data) {
+  async function editProject(data: IUserEditTechs) {
     try {
       await api.put(`/users/techs/${project.id}`, data, {
         headers: {
@@ -141,3 +156,8 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export function useUserContext() {
+  const context = useContext(AuthContext);
+  return context;
+}
