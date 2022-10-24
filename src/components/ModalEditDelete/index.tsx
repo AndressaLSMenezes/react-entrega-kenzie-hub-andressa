@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useUserContext } from "../../Providers";
-import { IProps } from "../../interfaces";
+import { IProps, ITech } from "../../interfaces";
 
 import { PinkButton, GreyButton } from "../Button";
 import { Title3 } from "../Fonts";
@@ -16,11 +16,6 @@ const schema = yup.object({
   status: yup.string().required("Status é obrigatório"),
 });
 
-export interface IUserEditTechs {
-  title: string;
-  status: string;
-}
-
 export const EditDelete = ({ object }: IProps) => {
   const { setVisibleModalEdit, editProject, deleteProject } = useUserContext();
 
@@ -28,7 +23,7 @@ export const EditDelete = ({ object }: IProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUserEditTechs>({
+  } = useForm<ITech>({
     resolver: yupResolver(schema),
   });
 

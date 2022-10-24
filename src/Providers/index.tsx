@@ -7,10 +7,14 @@ import { ReactNode } from "react";
 
 import { IUserRegister } from "../pages/Register";
 import { IUserLogin } from "../pages/Login";
-import { IUserEditTechs } from "../components/ModalEditDelete";
-import { IUserTechRegister } from "../components/ModalTechRegister";
 
-import { IUserContext, IProject, IProfile } from "../interfaces";
+import {
+  IUserContext,
+  IProject,
+  IProfile,
+  ITech,
+  ILoginProfile,
+} from "../interfaces";
 
 import api from "../services/api";
 
@@ -32,7 +36,7 @@ export const AuthProvider = ({ children }: IUserProvidersProps) => {
 
   async function postRegister(data: IUserRegister) {
     try {
-      const response = await api.post(`/users`, data);
+      const response = await api.post<IProfile>(`/users`, data);
       navigate("/");
       toast.success(" Cadastrado com Sucesso! ");
       console.log(response.data);
@@ -46,9 +50,10 @@ export const AuthProvider = ({ children }: IUserProvidersProps) => {
 
   async function postLogin(data: IUserLogin) {
     try {
-      const response = await api.post(`/sessions`, data);
+      const response = await api.post<ILoginProfile>(`/sessions`, data);
       toast.success(" Login feito com Sucesso! ");
       navigate("/dashboard");
+      console.log(response);
       getProfile(response.data.token);
       setTokenUser(response.data.token);
       localStorage.setItem("@TokenHub", JSON.stringify(response.data.token));
@@ -69,13 +74,12 @@ export const AuthProvider = ({ children }: IUserProvidersProps) => {
 
   async function getProfile(token: string) {
     try {
-      const response = await api.get("/profile", {
+      const response = await api.get<IProfile>("/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
       setProfileData(response.data);
     } catch (error) {
       console.error(error);
@@ -86,9 +90,9 @@ export const AuthProvider = ({ children }: IUserProvidersProps) => {
 
   // Creater Modal
 
-  async function createProject(data: IUserTechRegister) {
+  async function createProject(data: ITech) {
     try {
-      await api.post("/users/techs", data, {
+      await api.post<IProject>("/users/techs", data, {
         headers: {
           Authorization: `Bearer ${tokenUser}`,
           "Content-Type": "application/json",
@@ -117,14 +121,19 @@ export const AuthProvider = ({ children }: IUserProvidersProps) => {
     }
   }
 
-  async function editProject(data: IUserEditTechs) {
+  async function editProject(data: ITech) {
     try {
-      await api.put(`/users/techs/${project.id}`, data, {
-        headers: {
-          Authorization: `Bearer ${tokenUser}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api.put<IProject>(
+        `/users/techs/${project.id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenUser}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
       setVisibleModalEdit(false);
       getProfile(tokenUser);
     } catch (error) {

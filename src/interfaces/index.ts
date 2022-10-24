@@ -1,15 +1,15 @@
+import { type } from "os";
+import { Token } from "typescript";
 import { IUserLogin } from "../pages/Login";
-import { IUserEditTechs } from "../components/ModalEditDelete";
-import { IUserTechRegister } from "../components/ModalTechRegister";
 
 export interface IUserContext {
   postRegister(data: IUserRegister): void;
   postLogin(data: IUserLogin): void;
   goOut(): void;
   getProfile(token: string): void;
-  createProject(data: IUserTechRegister): void;
+  createProject(data: ITech): void;
   deleteProject(data: string): void;
-  editProject(data: IUserEditTechs): void;
+  editProject(data: ITech): void;
 
   tokenUser: string;
   profileData: IProfile;
@@ -35,7 +35,8 @@ export interface IUserRegister {
   updated_at: string;
 }
 
-export interface IProfile {
+export interface ILoginProfile {
+  token: string;
   avatar_url: string | null;
   id: string;
   contact: string;
@@ -48,6 +49,8 @@ export interface IProfile {
   works: string[];
 }
 
+export type IProfile = Omit<ILoginProfile, "token">;
+
 export interface IProject {
   created_at: string;
   id: string;
@@ -58,4 +61,9 @@ export interface IProject {
 
 export interface IProps {
   object: IProject;
+}
+
+export interface ITech {
+  title: string;
+  status: string;
 }

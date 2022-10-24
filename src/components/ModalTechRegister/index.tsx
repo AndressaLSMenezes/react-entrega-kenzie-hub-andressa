@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers";
+import { useUserContext } from "../../Providers";
+import { ITech } from "../../interfaces";
 
 import { Modal } from "./style";
 import { Title3 } from "../Fonts";
@@ -10,24 +10,19 @@ import Input from "../Input";
 import { Select } from "../Select";
 import { PinkButton } from "../Button";
 
-export interface IUserTechRegister {
-  title: string;
-  status: string;
-}
-
 const schema = yup.object({
   title: yup.string().required("Nome é obrigatório"),
   status: yup.string().required("Status é obrigatório"),
 });
 
 export const TechRegister = () => {
-  const { setVisibleModalCreater, createProject } = useContext(AuthContext);
+  const { setVisibleModalCreater, createProject } = useUserContext();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUserTechRegister>({
+  } = useForm<ITech>({
     resolver: yupResolver(schema),
   });
 
